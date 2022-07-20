@@ -1,0 +1,16 @@
+project/project
+project/target
+project/.bloop
+target
+
+
+# IDEs and editors
+/.idea
+/.vscode
+/.metals
+/.bsp
+/.bloop
+.project
+.classpath
+*.launch
+.settings/
