@@ -5,8 +5,7 @@ import scala.util.Try
 
 case class DBParameters(
     nameDB: Option[String],
-    tables: Option[Array[String]],
-    numPartitions: Option[Int] = None
+    tables: Option[Array[String]]
 )
 
 object DBParameters {

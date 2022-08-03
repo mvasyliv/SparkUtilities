@@ -1,16 +1,36 @@
-lazy val root = (project in file(".")).settings(
-  scalaVersion := "2.13.8",
-  name := "sparkUtilities",
-  organization := "com.vmv",
-  version := "1.0",
-  libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.1.1"
+val projectName = "SparkUtilities"
+
+addCommandAlias(
+  "sanity",
+  ";clean ;compile ;test ;scalafmtAll ;assembly"
 )
+lazy val root = (project in file("."))
+  .settings(
+    scalaVersion := "2.13.8",
+    name := "sparkUtilities",
+    organization := "com.vmv",
+    version := "1.0",
+    libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.1.1"
+  )
+  .aggregate(consolidationFiles, backupDB)
 
 lazy val consolidationFiles = (project in file("consolidationFiles")).settings(
   scalaVersion := "2.11.12",
-  name := "sparkConsolidatioFiles",
+  name := "sparkConsolidationFiles",
   organization := "com.vmv",
   version := "1.0",
+  assembly / assemblyJarName := s"$projectName-${name.value}-assembly-${version.value}.jar",
+  assembly / test := (Test / test).value,
+  scalacOptions ++= Seq(
+    //    "-Ypartial-unification",
+    "-target:jvm-1.8"
+  ),
+  javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint"),
+//  git.useGitDescribe := true,
+//  assembly / assemblyMergeStrategy := {
+//    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+//    case _                             => MergeStrategy.first
+//  },
   resolvers ++= Seq(
     "Hortonworks repository" at "https://repo.hortonworks.com/content/repositories/releases/",
     "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/",
